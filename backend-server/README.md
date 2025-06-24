@@ -85,7 +85,6 @@ Expone el endpoint de health del backend. Este endpoint se mantiene funcional in
    => => exporting layers                                                                                                           0.2s
    => => writing image sha256:77e2b4a73c321afd4cb0ab8bfa430a7d895046dd7d2258eea45ba273dd1273d3                                      0.0s
    => => naming to docker.io/library/backend-challenge-file-ingestion-backend:latest                                                0.0s
-   amildie@DESKTOP-9L2653D:~/backend-challenge-file-ingestion$
    ```
 
 5. Montar el directorio de input donde está el archivo que vamos a leer:
