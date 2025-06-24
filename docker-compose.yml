@@ -1,0 +1,30 @@
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    container_name: sqlserver
+    ports:
+      - "1433:1433"
+    networks:
+      - app-network
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+  backend:
+    build: ./backend-server
+    container_name: backend-server
+    depends_on:
+      - db
+    volumes:
+      - ./data-generator/challenge/input:/input
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+volumes:
+  sqlserver-data:

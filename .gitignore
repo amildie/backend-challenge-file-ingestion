@@ -27,3 +27,5 @@ yarn-error.log*
 Thumbs.db
 
 package-lock.json
+data-generator/challenge/input/CLIENTES_IN_0425.dat
+tree.out

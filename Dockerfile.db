@@ -1,0 +1,27 @@
+FROM mcr.microsoft.com/mssql/server:2022-latest
+
+USER root
+
+ENV ACCEPT_EULA=Y
+ENV SA_PASSWORD=Str0ngPass!123
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y curl gnupg apt-transport-https && \
+    curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+    apt-get update && \
+    # had to remove existing ODBC packages to avoid conflicts
+    apt-get remove -y libodbc2 libodbcinst2 unixodbc-common || true && \
+    apt-get install -y unixodbc && \
+    apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
+        msodbcsql17 \
+        mssql-tools \
+        unixodbc-dev && \
+    ln -s /opt/mssql-tools/bin/sqlcmd /usr/bin/sqlcmd && \
+    echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+
+COPY ./init /init
+COPY ./init/entrypoint.sh /usr/src/entrypoint.sh
+RUN chmod +x /usr/src/entrypoint.sh
+
+ENTRYPOINT ["/usr/src/entrypoint.sh"]

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqlserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sqlserver
+  template:
+    metadata:
+      labels:
+        app: sqlserver
+    spec:
+      containers:
+      - name: sqlserver
+        image: backend-challenge-file-ingestion-db:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 1433
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          value: "Str0ngPass!123"
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+        volumeMounts:
+        - mountPath: /var/opt/mssql
+          name: sql-volume
+      volumes:
+      - name: sql-volume
+        emptyDir: {}
